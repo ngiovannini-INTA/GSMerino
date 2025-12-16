@@ -511,3 +511,4 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
