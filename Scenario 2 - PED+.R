@@ -60,7 +60,7 @@ SP$addSnpChip(nSnpPerChr = 2000) #52k (2000)
 #Base Population of founders
 founders = newPop(founderGenomes)
 
-#Phenotype the founders y generate DES trait (threshold), supress phenotypes on dead individuals
+#Phenotype the founders and generate DES trait (threshold), supress phenotypes on dead individuals
 founders = setPheno(pop=founders, h2=heritability)
 
 umb <- mean(founders@pheno[,1]) - sd(founders@pheno[,1])*1.25 #threshold value 1ds = 16% del área
@@ -504,3 +504,4 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
