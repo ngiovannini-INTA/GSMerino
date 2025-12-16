@@ -43,7 +43,7 @@ SP$setSexes('yes_sys')
 #PCD: Weaning weight
 #PVL: Clean wool weight
 #PDF: Average fiber diameter
-#PCA: Adult weig
+#PCA: Adult weight
 
 phenoVar = c(0.14,11.90,0.09,2.07,20.25)
 
@@ -480,6 +480,7 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
 
 
 
