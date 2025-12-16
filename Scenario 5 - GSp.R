@@ -74,10 +74,6 @@ system.time(
     #Assign year of birth for the founders
     year = 0
     
-    #founders = setMisc(x = founders,
-    #                   node = 'YearOfBirth',
-    #                   value = year)
-    
     founders@misc$YearOfBirth <- year
     
     # Generate Initial parent populations ----------------------------------------------------------------
@@ -333,24 +329,16 @@ system.time(
     pre.snp.ref <- apply(SNPref[,17:ncol(SNPref)], MARGIN = 1, FUN = paste, sep = '', collapse= '')
     id.ref <- SNPref$id
     
-    #id.ref <- sprintf("%05d",as.numeric(id.ref)) #complete with leading zeros to have a standard size id
-    pre.snp.i <- cbind(id.ref, pre.snp.ref)
+   pre.snp.i <- cbind(id.ref, pre.snp.ref)
 
           for (year in 11:21) {
           cat('Working on the year:',year,'\n')
           
           #generate progeny from current sires and dams
           candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
-          #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
           candidates@misc$YearOfBirth = rep(year, nInd(dams)) 
-          #candidates = attrition(candidates, p=0.2) #mortality and/or discard due to defects at marking
           candidates = setPheno(candidates, h2 = 0.04, traits = 1) #DES phenotype only lambs
           candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
-          #candidates.H = selectInd(pop = candidates, nInd = sum(isFemale(candidates)), use = 'rand', sex='F')
-          #candidates.M = selectInd(pop = candidates, nInd = sum(isMale(candidates)), use = 'rand', sex='M')
-          
-          #male candidates that efectivelly are phenotyped (75%)
-          #candidates.M = attrition(candidates.M, p=0.25)
           
           #The animals are phenotyped at 1 year of age
           sires0 = attrition(sires0, p=0.40) #phenotyped males 60% of DES=1
@@ -364,29 +352,9 @@ system.time(
           data4AllAnimals = recordData(data = data4AllAnimals,
                                        pop = c(dams0,sires0))
           
-          #record data for all newborn animals
-          #data4AllAnimals = recordData(data = data4AllAnimals,
-          #                             pop = candidates,
-          #                             YearOfUse = NA)
-          
-          #record data for the used sires and dams (young and old)
-          #data4AllParents = recordData(data = data4AllParents,
-          #                             pop = c(sires,dams),
-          #                             YearOfUse = year)
-          
-          #Exports data and pedigree files
-          #ped.cand <- data.frame(id = candidates@id,
-          #                       father = candidates@father,
-          #                       mother = candidates@mother)
-          
-          #ped.cand <- ped.cand %>% filter(sex == 'M') %>%
-          #                        select(1:3)
-          
           ped <- data.frame(id = data4AllAnimals$id, 
                             father = data4AllAnimals$father, 
                             mother = data4AllAnimals$mother)
-          
-          #ped <- rbind(ped,ped.cand)
           
           dat <- data.frame(id = data4AllAnimals$id, 
                             sex = data4AllAnimals$sex, 
@@ -397,43 +365,9 @@ system.time(
                             PDF = data4AllAnimals$pPDF,
                             PCA = data4AllAnimals$pPCA)
           
-          #dat.cand <- data.frame(id = candidates@id, 
-          #                  sex = candidates@sex, 
-          #                  AN = candidates@misc$YearOfBirth, 
-          #                  DES = NA, 
-          #                  PCD = NA, 
-          #                  PVL = NA,
-          #                  PDF = NA,
-          #                  PCA = NA)
-          
           dat <- subset(dat, AN >= 3 ) #define a partir de que anio hay registros 
           
-          #dat <- rbind(dat.cand,dat)
-          
-          #Exports data and pedigree files
-          #ped <- select(data4AllAnimals,c(id,father,mother))
-          #ped$id <- sprintf("%05d",as.numeric(ped$id))
-          #ped$father <- sprintf("%05d",as.numeric(ped$father))
-          #ped$mother <- sprintf("%05d",as.numeric(ped$mother))
-          
-          #ped[ped == "00000"] <- "0"
-          
-          #dat <- select(data4AllAnimals,c(id, sex, YearOfBirth, pheno))
-          #dat$id <- sprintf("%05d",as.numeric(dat$id))
-          
-          #Exports SNPs of candidates and animals that de candidatos and animals that have been parents
-          #snpCandidatos <- data.frame(id = candidates.M@id, geno = pullSnpGeno(candidates.M))
-          #snpCandidatos <- subset(snpCandidatos, sex == 'M')
-          
-          #exports SNPs of reference population for preselection
-                    
-          #SNPcand <- data4AllAnimals %>% dplyr::filter(YearOfBirth == year-1)
-          #pre.snp.cand <- apply(snpCandidatos[,2:ncol(snpCandidatos)], MARGIN = 1, FUN = paste, sep = '', collapse= '')
-          #id.cand <- snpCandidatos$id
-          #snp1 <- cbind(id.cand, pre.snp.cand)
-          
-          #pre.snp.i <- rbind(pre.snp.i,snp1)
-          
+                  
           #Linux server
           #write.table(ped, file = "/home/corva/NicoG/doc/ped.dat", sep=" ", row.names = F, col.names = F, quote=F, na='-999')
           #write.table(dat, file = "/home/corva/NicoG/doc/dat.dat", sep=" ", row.names = F, col.names = F, quote=F, na='-999')
@@ -487,11 +421,6 @@ system.time(
           snp1 <- cbind(id.cand, pre.snp.cand)
           
           pre.snp.i <- rbind(pre.snp.i,snp1)
-          
-          #Update SNPs DB with 20% of superior males
-          #actualizo la BD de SNPs con el 20% de machos superiores
-          write.fwf(pre.snp.i, file = "d:/PROVINO/temp/e5/snp.dat", sep="", rownames = F, colnames = F, width = c(7,52000))
-          #write.fwf(pre.snp.i, file = "/home/corva/NicoG/doc/snp.dat", sep="", rownames = F, colnames = F, width = c(7,52000))
           
           #run BLUP2 windows 
           setwd('d:/PROVINO/temp/e5/')
@@ -622,3 +551,4 @@ system.time(
 #local windows
 write.table(out.i,"d:/PROVINO/temp/e5/out.csv", sep=';')
 write.table(cor.i,"d:/PROVINO/temp/e5/cor.csv", sep=';')
+
