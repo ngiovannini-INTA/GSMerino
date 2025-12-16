@@ -8,7 +8,6 @@ library(gdata)
 out.i <- data.frame()
 cor.i <- vector()
 
-#rep=1
 system.time(
   for (rep in 1:50) {
     cat('Repeticion:',rep,'\n')
@@ -76,11 +75,6 @@ system.time(
     #Assign year of birth for the founders
     year = 0
     
-    founders@misc$YearOfBirth <- year
-    #founders = setMisc(x = founders,
-    #                   node = 'YearOfBirth',
-    #                   value = year)
-    
     #Generate Initial parent populations ----------------------------------------------------------------
     #Size of the breeding nucleus (without lambs)
     nFemales = 1000
@@ -124,7 +118,6 @@ system.time(
     sires1 = males[start:end] #2T
     sires1@misc$YearOfBirth <- rep(-1,nMales1)
 
-    
     #Sires0
     (start = end + 1)
     (end = start - 1 + nMales0)
@@ -279,8 +272,6 @@ system.time(
       
       #generate progeny from current sires and dams
       candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
-      #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
-      #candidates = attrition(candidates, p=0.25) #This is where the animals that do not reach phenotyping are filtered out
       candidates@misc$YearOfBirth = rep(year, nInd(dams))
       candidates = setPheno(candidates, h2 = 0.04, traits = 1) #Phenotype DES only lambs
       candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
@@ -329,18 +320,14 @@ system.time(
     pre.snp.ref <- apply(SNPref[,17:ncol(SNPref)], MARGIN = 1, FUN = paste, sep = '', collapse= '')
     id.ref <- SNPref$id
     
-    #id.ref <- sprintf("%05d",as.numeric(id.ref)) #complete with leading zeros to have a standard size id
     pre.snp.i <- cbind(id.ref, pre.snp.ref)
-    
                    
         for (year in 11:21) {
           cat('Working on the year:',year,'\n')
           
           #generate progeny from current sires and dams
           candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
-          #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
           candidates@misc$YearOfBirth = rep(year, nInd(dams))
-          #candidates = attrition(candidates, p=0.1) #mortality and/or discard due to defects at marking
           candidates = setPheno(candidates, h2 = 0.04, traits = 1) #DES phenotype only lambs
           candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
           
@@ -357,12 +344,6 @@ system.time(
           data4AllAnimals = recordData(data = data4AllAnimals,
                                        pop = c(dams0,sires0))
           
-
-          #record data for the used sires and dams (young and old)
-          #data4AllParents = recordData(data = data4AllParents,
-          #                             pop = c(sires,dams),
-          #                             YearOfUse = year)
-          
           #Exports data and pedigree files
           ped <- data.frame(id = data4AllAnimals$id, 
                             father = data4AllAnimals$father, 
@@ -378,17 +359,6 @@ system.time(
                             PCA = data4AllAnimals$pPCA)
           
           dat <- subset(dat, AN >= 3) #Since what year are there records?
-          
-          #Exports data and pedigree files
-          #ped <- select(data4AllAnimals,c(id,father,mother))
-          #ped$id <- sprintf("%05d",as.numeric(ped$id))
-          #ped$father <- sprintf("%05d",as.numeric(ped$father))
-          #ped$mother <- sprintf("%05d",as.numeric(ped$mother))
-          
-          #ped[ped == "00000"] <- "0"
-          
-          #dat <- select(data4AllAnimals,c(id, sex, YearOfBirth, pheno))
-          #dat$id <- sprintf("%05d",as.numeric(dat$id))
           
           #Exports SNPs of candidates and animals that de candidatos and animals that have been parents
           SNPcand <- data4AllAnimals %>% dplyr::filter(YearOfBirth == year-1 & pDES==1)
@@ -537,6 +507,7 @@ write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
 #local windows
 #write.table(out.i,"d:/PROVINO/temp/e3/out.csv", sep=';')
 #write.table(cor.i,"d:/PROVINO/temp/e3/cor.csv", sep=';')
+
 
 
 
