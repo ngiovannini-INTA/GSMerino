@@ -10,9 +10,6 @@ cor.i <- vector()
 
 # Simulate founder genomes ----------------------------------------------------------------------
 #founderGenomes = quickHaplo(nInd=3000, nChr=26, segSites=3000)
-
-
-#rep=1
 system.time(
   for (rep in 1:50) {
     cat('Repeticion:',rep,'\n')
@@ -78,9 +75,6 @@ system.time(
     year = 0
     
     founders@misc$YearOfBirth <- year
-    #founders = setMisc(x = founders,
-    #                   node = 'YearOfBirth',
-    #                   value = year)
     
     # Generate Initial parent populations ----------------------------------------------------------------
     #Size of the breeding nucleus (without lambs)
@@ -110,7 +104,6 @@ system.time(
     sires3 = males[start:end] #6T
     sires3@misc$YearOfBirth <- rep(-3,nMales3)
 
-    
     #Sires2
     (start = end + 1)
     (end = start - 1 + nMales2)
@@ -118,22 +111,19 @@ system.time(
     sires2 = males[start:end] #4T
     sires2@misc$YearOfBirth <- rep(-2,nMales2)
 
-    
     #Sires1
     (start = end + 1)
     (end = start - 1 + nMales1)
     
     sires1 = males[start:end] #2T
     sires1@misc$YearOfBirth <- rep(-1,nMales1)
-
-    
+   
     #Sires0
     (start = end + 1)
     (end = start - 1 + nMales0)
     
     sires0 = males[start:end] #DL
     sires0@misc$YearOfBirth <- rep(0,nMales0)
-
     
     #sires0 only have DES data, they are phenotyped in the loop
     sires0@pheno[,2] <- NA
@@ -283,8 +273,6 @@ system.time(
       #generate progeny from current sires and dams
       candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
       candidates@misc$YearOfBirth = rep(year, nInd(dams))
-      #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
-      #candidates = attrition(candidates, p=0.25) #This is where the animals that do not reach phenotyping are filtered out
       candidates = setPheno(candidates, h2 = 0.04, traits = 1) #Phenotype DES only lambs
       candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
       
@@ -341,8 +329,6 @@ system.time(
           #generate progeny from current sires and dams
           candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
           candidates@misc$YearOfBirth = rep(year, nInd(dams))
-          #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
-          #candidates = attrition(candidates, p=0.1) #mortality and/or discard due to defects at marking
           candidates = setPheno(candidates, h2 = 0.04, traits = 1) #DES phenotype only lambs
           candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
           
@@ -360,11 +346,6 @@ system.time(
                                        pop = c(dams0,sires0))
           
 
-          #record data for the used sires and dams (young and old)
-          #data4AllParents = recordData(data = data4AllParents,
-          #                             pop = c(sires,dams),
-          #                             YearOfUse = year)
-          
           #Exports data and pedigree files
           ped <- data.frame(id = data4AllAnimals$id, 
                             father = data4AllAnimals$father, 
@@ -380,17 +361,6 @@ system.time(
                             PCA = data4AllAnimals$pPCA)
           
           dat <- subset(dat, AN >= 3) #define a partir de que anio hay registros
-          
-          #Exports data and pedigree files
-          #ped <- select(data4AllAnimals,c(id,father,mother))
-          #ped$id <- sprintf("%05d",as.numeric(ped$id))
-          #ped$father <- sprintf("%05d",as.numeric(ped$father))
-          #ped$mother <- sprintf("%05d",as.numeric(ped$mother))
-          
-          #ped[ped == "00000"] <- "0"
-          
-          #dat <- select(data4AllAnimals,c(id, sex, YearOfBirth, pheno))
-          #dat$id <- sprintf("%05d",as.numeric(dat$id))
           
           #Exports SNPs of candidates and animals that de candidatos and animals that have been parents
           SNPcand <- data4AllAnimals %>% dplyr::filter(YearOfBirth == year-1 & pDES==1)
@@ -538,4 +508,5 @@ system.time(
 #local windows
 write.table(out.i,"d:/PROVINO/temp/e4/out.csv", sep=';')
 write.table(cor.i,"d:/PROVINO/temp/e4/cor.csv", sep=';')
+
 
