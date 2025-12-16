@@ -346,7 +346,7 @@ system.time(
           
           
           #The animals are phenotyped at 1 year of age
-          sires0 = attrition(sires0, p=0.70) #phanotyped males 30% of DES=1
+          sires0 = attrition(sires0, p=0.70) #phenotyped males 30% of DES=1
           sires0 = setPheno(sires0, h2 = c(0.20, 0.30, 0.45, 0.35), traits = c(2,3,4,5))
           
           dams0 = attrition(dams0, p=0.35) #phenotyped females 65% of DES=1 
@@ -534,5 +534,6 @@ write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
 #local windows
 #write.table(out.i,"d:/PROVINO/temp/e3/out.csv", sep=';')
 #write.table(cor.i,"d:/PROVINO/temp/e3/cor.csv", sep=';')
+
 
 
