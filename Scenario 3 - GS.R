@@ -38,7 +38,13 @@ system.time(
     
     SP$setSexes('yes_sys')
     
-    #TRAITS: DES PCD PVL PDF PCA
+ #TRAITS ORDER: DES PCD PVL PDF PCA
+ #DES: Survival to weaning
+ #PCD: Weaning weight
+ #PVL: Clean wool weight
+ #PDF: Average fiber diameter
+ #PCA: Adult weight
+    
     phenoVar = c(0.14,11.90,0.09,2.07,20.25)
     
     heritability = c(0.04,0.2,0.3,0.45,0.35) 
@@ -507,6 +513,7 @@ write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
 #local windows
 #write.table(out.i,"d:/PROVINO/temp/e3/out.csv", sep=';')
 #write.table(cor.i,"d:/PROVINO/temp/e3/cor.csv", sep=';')
+
 
 
 
