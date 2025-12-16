@@ -16,7 +16,7 @@ system.time(
     # Simulate founder genomes ----------------------------------------------------------------------
     #founderGenomes = quickHaplo(nInd=3000, nChr=26, segSites=3000)
     system.time(
-      founderGenomes <- runMacs2(nInd = 5000,                                  #CEstimate that approximately half are female
+      founderGenomes <- runMacs2(nInd = 5000,                                  #Estimate that approximately half are female
                                  nChr = 26,                                    #Sciencie 26
                                  segSites = 3000,                              #(QTLs + SNPs) per Chr
                                  Ne = 120,                                     #vozzi et al, 120
@@ -534,4 +534,5 @@ write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
 #local windows
 #write.table(out.i,"d:/PROVINO/temp/e3/out.csv", sep=';')
 #write.table(cor.i,"d:/PROVINO/temp/e3/cor.csv", sep=';')
+
 
