@@ -38,7 +38,13 @@ SP = SimParam$new(founderGenomes)
 
 SP$setSexes('yes_sys')
 
-#TRAITS: DES PCD PVL PDF PCA
+#TRAITS ORDER: DES PCD PVL PDF PCA
+#DES: Survival to weaning
+#PCD: Weaning weight
+#PVL: Clean wool weight
+#PDF: Average fiber diameter
+#PCA: Adult weig
+
 phenoVar = c(0.14,11.90,0.09,2.07,20.25)
 
 heritability = c(0.04,0.2,0.3,0.45,0.35) 
@@ -474,6 +480,7 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
 
 
 
