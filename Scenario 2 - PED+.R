@@ -8,8 +8,6 @@ library(gdata)
 out.i <- data.frame()
 cor.i <- vector()
 
-#rep=1
-
 system.time(
   for (rep in 1:50) {
     cat('Repeticion:',rep,'\n')
@@ -77,9 +75,6 @@ founders@pheno[,5] <- ifelse(founders@pheno[,1]==0,NA,founders@pheno[,5])
 year = 0
 
 founders@misc$YearOfBirth <- year
-#founders = setMisc(x = founders,
-#                   node = 'YearOfBirth',
-#                   value = year)
 
 # Generate Initial parent populations ----------------------------------------------------------------
 #Size of the breeding nucleus (without lambs)
@@ -245,8 +240,7 @@ recordData <- function(data=NULL, pop, YearOfUse=NA){
   } else { ret = rbind(data,popData)
   }
   return(ret)
-  
-}
+ }
 
 data4AllAnimals = recordData(pop=founders)
 data4NewParents = recordData(pop=c(sires1,dams1))
@@ -270,9 +264,7 @@ varG = matrix(c(0.006,	0.006,	0.000,	0.001,	0.018,
                 0.001,	0.000,	0.042,	0.933,	0.257,
                 0.018,	0.131,	0.116,	0.257,	7.088), ncol=5)
 
-
 b <- as.vector(smithHazel(econWt,varG=varG ,varP = varP))
-
 
 #Dynamics
 for (year in 1:10) {
@@ -281,8 +273,6 @@ for (year in 1:10) {
   #generate progeny from current sires and dams
   candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
   candidates@misc$YearOfBirth = rep(year, nInd(dams)) 
-  #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
-  #candidates = attrition(candidates, p=0.25) #This is where the animals that do not reach phenotyping are filtered out
   candidates = setPheno(candidates, h2 = 0.04, traits = 1) #Phenotyped DES only lambs
   candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
   
@@ -316,11 +306,6 @@ for (year in 1:10) {
   #record data for dead ones
   data4AllAnimals = recordData(data = data4AllAnimals,
                                pop = c(sires0b,dams0b))
-  
-  #record data for de newly selected sires and dams (just the new ones)
-  #data4NewParents = recordData(data = data4NewParents,
-  #                             pop = c(sires1,dams1))
-  
 }
 
 # Scenario 2 PED+ --------------------------------- 
@@ -331,8 +316,6 @@ for (year in 11:21) {
   #generate progeny from current sires and dams
   candidates = randCross2(males = sires, females = dams, nCrosses = nInd(dams))
   candidates@misc$YearOfBirth = rep(year, nInd(dams)) 
-  #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
-  #candidates = attrition(candidates, p=0.2) #mortality and/or discard due to defects at marking
   candidates = setPheno(candidates, h2 = 0.04, traits = 1) #DES phenotype only lambs
   candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
   
@@ -344,14 +327,8 @@ for (year in 11:21) {
   dams0 = setPheno(dams0, h2 = c(0.20, 0.30, 0.45, 0.35), traits = c(2,3,4,5))
   
   #record data for all newborn animals (1 year)
-  #candDES0 = selectInd(pop = candidates, nInd = sum(candidates@pheno[,1]==0), trait = 1, use = 'pheno', sex='B', selectTop = F)  #I recover dead lambs for genetic evaluation
   data4AllAnimals = recordData(data = data4AllAnimals,
                                pop = c(dams0,sires0))
-  
-  #record data for the used sires and dams (young and old)
-  #data4AllParents = recordData(data = data4AllParents,
-  #                             pop = c(sires,dams),
-  #                             YearOfUse = year)
   
   #Exports data and pedigree files
   ped <- data.frame(id = data4AllAnimals$id, 
@@ -464,14 +441,7 @@ for (year in 11:21) {
   #record data for dead ones
   data4AllAnimals = recordData(data = data4AllAnimals,
                                pop = c(sires0b,dams0b))
-  
-  #record data for de newly selected sires and dams (just the new ones)
-  #data4NewParents = recordData(data = data4NewParents,
-  #                             pop = c(sires1,dams1))
-  
-  
-  
-}
+ }
 
 out <- data4AllAnimals %>%
   #group_by(YearOfBirth) %>%
@@ -504,6 +474,7 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
 
 
 
