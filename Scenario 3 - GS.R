@@ -510,9 +510,12 @@ system.time(
           dplyr::mutate(rep=rep)
         
        out.i <- rbind(out.i,out)
-       
-       file.rename('/home/corva/NicoG/doc/renf90.inb',paste('/home/corva/NicoG/doc/renf90',rep,'.inb',sep=''))  
 
+       #save inbreeding file - linux server
+       file.rename('/home/corva/NicoG/doc/renf90.inb',paste('/home/corva/NicoG/doc/renf90',rep,'.inb',sep=''))  
+       
+       #save inbreeding file - local windows
+       #file.rename('d:/PROVINO/temp/e3/renf90.inb',paste('d:/PROVINO/temp/e3/renf90',rep,'.inb',sep='')) 
         
        #temp files
        #Linux server
@@ -534,6 +537,7 @@ write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
 #local windows
 #write.table(out.i,"d:/PROVINO/temp/e3/out.csv", sep=';')
 #write.table(cor.i,"d:/PROVINO/temp/e3/cor.csv", sep=';')
+
 
 
 
