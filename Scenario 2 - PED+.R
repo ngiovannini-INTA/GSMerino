@@ -19,7 +19,7 @@ system.time(
     system.time(
       founderGenomes <- runMacs2(nInd = 5000,                                  #Estimate that approximately half are female
                                  nChr = 26,                                    #Sciencie 26
-                                 segSites = 3000,                              #(QTLs + SNPs) por Chr
+                                 segSites = 3000,                              #(QTLs + SNPs) per Chr
                                  Ne = 120,                                     #vozzi et al, 120
                                  bp = 100000000,                               #genome size divided by the number of chromosomes, https://www.sheephapmap.org/
                                  genLen=1,                                     #genome size in morgans
@@ -63,7 +63,7 @@ founders = newPop(founderGenomes)
 #Phenotype the founders and generate DES trait (threshold), supress phenotypes on dead individuals
 founders = setPheno(pop=founders, h2=heritability)
 
-umb <- mean(founders@pheno[,1]) - sd(founders@pheno[,1])*1.25 #threshold value 1ds = 16% of área
+umb <- mean(founders@pheno[,1]) - sd(founders@pheno[,1])*1.25 #threshold value 1ds = 16% of area
 
 founders@pheno[,1] <- ifelse(founders@pheno[,1] < umb,0,1)
 founders@pheno[,2] <- ifelse(founders@pheno[,1]==0,NA,founders@pheno[,2])
@@ -283,7 +283,7 @@ for (year in 1:10) {
   candidates@misc$YearOfBirth = rep(year, nInd(dams)) 
   #candidates = setMisc(x = candidates, node = 'YearOfBirth', value = year)
   #candidates = attrition(candidates, p=0.25) #This is where the animals that do not reach phenotyping are filtered out
-  candidates = setPheno(candidates, h2 = 0.04, traits = 1) #fenotipo DES solo a los corderos
+  candidates = setPheno(candidates, h2 = 0.04, traits = 1) #Phenotyped DES only lambs
   candidates@pheno[,1] <- ifelse(candidates@pheno[,1] < umb,0,1)
   
   
@@ -504,5 +504,6 @@ rm(list=setdiff(ls(), c("out.i","cor.i")))
 #linux server
 write.table(out.i,"/home/corva/NicoG/doc/out.csv", sep=';', row.names = F)
 write.table(cor.i,"/home/corva/NicoG/doc/cor.csv", sep=';', row.names = F)
+
 
 
