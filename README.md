@@ -1,4 +1,5 @@
 # Selección genómica en ovinos Merino. Esquemas alternativos para maximizar el beneficio económico
+*Genomic selection in Merino sheep. Alternative schemes to maximize economic benefit*
 
 ## Scenarios modeled
 This repository contains the scripts developed for the scenarios modeled in the manuscript.
